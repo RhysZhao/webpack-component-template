@@ -2,45 +2,69 @@
  * Author  rhys.zhao
  * Date  2021-09-16 13:23:39
  * LastEditors  rhys.zhao
- * LastEditTime  2022-06-07 10:31:10
+ * LastEditTime  2023-02-06 17:41:35
  * Description 拖拽、缩放容器组件
 -->
-
 ## 描述
 
-drag-zoom-container 是一个 React 容器组件，放在里面的组件可以拖拽，滚动缩放。
+webpack-component-template 是一个 React 组件模板。开发组件可以使用此模板。
+内有一个示例组件 DragZoomContainer。
+DragZoomContainer 是一个 React 容器组件，放在里面的组件可以拖拽，滚动缩放。
 
-## 安装
+## 项目目录
 
 ```
-npm install drag-zoom-container --save
+webpack-component-template
+├─ config
+│  ├─ webpack.dev.config.js  // webpack开发环境配置
+│  └─ webpack.prod.config.js // webpack生产环境配置
+├─ example                   // 示例，通过引用组件来测试组件是否正常
+│  ├─ app.js
+│  └─ index.html
+├─ lib                       // 组件打包生成目录
+│  └─ index.js
+├─ src                       // 组件源文件目录
+│  ├─ index.js
+│  └─ index.scss
+├─ LICENSE
+├─ README.md
+├─ package-lock.json
+└─ package.json
+
 ```
 
 ## 使用
 
-1. 引入
+1. 预览
 
 ```
-import DragZoomContainer from 'drag-zoom-container';
+npm start
 ```
 
-2. 使用
+2. 打包
 
 ```
-<DragZoomContainer>
-    <div style={{ width: 100, height: 150, background: 'red' }} />
-</DragZoomContainer>
+npm run build
 ```
 
-其中，`DragZoomContainer`内的 div 即为要拖拽、缩放的内容。
+3. 打包后预览
+```
+npm run build
+```
 
-## 属性
+然后修改 /example/app.js 里的引入地址为 /lib.
+比如：
+```
+import DragZoomContainer from '../src';
+```
+修改为
+```
+import DragZoomContainer from '../lib';
+```
 
-| 属性           | 描述                                             | 类型    | 默认值               |
-| :------------- | :----------------------------------------------- | :------ | :------------------- |
-| zoomOnInner    | 鼠标是否放在缩放组件上才可滚动缩放               | boolean | false                |
-| zoomRange      | 缩放倍数范围                                     | object  | { min: 0.5, max: 5 } |
-| zoomOrigin     | 缩放源，具体参考 css 属性 transform-origin       | string  | "50% 50%"            |
-| dragInDocument | 拖拽是否限制在整个文档。false 限制拖拽在父容器内 | boolean | true                 |
-| outerStyle     | 容器组件的样式，默认宽、高等于父元素             | object  | {}                   |
-| position       | 拖拽组件在容器中的位置。默认左上角               | object  | { top: 0, left: 0 }  |
+最后启动：
+```
+npm start
+```
+这样就可以实现打包后组件的预览。
+
