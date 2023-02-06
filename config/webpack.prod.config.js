@@ -2,23 +2,43 @@
  * Author  rhys.zhao
  * Date  2022-01-28 15:24:07
  * LastEditors  rhys.zhao
- * LastEditTime  2023-02-06 13:47:46
+ * LastEditTime  2023-02-06 17:08:52
  * Description 生产环境webpack配置
  */
-const path = require('path');
-const { merge } = require('webpack-merge');
-const baseConfig = require('./webpack.base.js'); // 引用公共的配置
+const { resolve } = require('path');
 
-const prodConfig = {
+module.exports = {
   mode: 'production',
-  entry: path.join(__dirname, '../src/index.js'),
+  entry: resolve(__dirname, '../src/index.js'),
   output: {
-    path: path.join(__dirname, '../lib/'),
+    path: resolve(__dirname, '../lib/'),
     filename: 'index.js',
     libraryTarget: 'umd', // 采用通用模块定义
     libraryExport: 'default' // 兼容 ES6 的模块系统、CommonJS 和 AMD 模块规范
   },
-  plugins: [],
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        include: resolve(__dirname, '../src'),
+        loader: 'babel-loader'
+      },
+      {
+        test: /\.scss|sass$/,
+        include: resolve(__dirname, '../src'),
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true
+            }
+          },
+          'sass-loader'
+        ]
+      }
+    ]
+  },
   externals: {
     // 定义外部依赖，避免把react和react-dom打包进去
     react: {
@@ -35,5 +55,3 @@ const prodConfig = {
     }
   }
 };
-
-module.exports = merge(prodConfig, baseConfig); // 将baseConfig和prodConfig合并为一个配置

@@ -2,11 +2,12 @@
  * Author  rhys.zhao
  * Date  2022-01-28 15:27:52
  * LastEditors  rhys.zhao
- * LastEditTime  2022-06-22 13:36:56
+ * LastEditTime  2023-02-06 16:35:22
  * Description 拖拽，缩放容器组件
  */
 import React, { useEffect, useRef } from 'react';
 import styles from './index.scss';
+import PropTypes from 'prop-types';
 
 let params = {
   isDragging: false,
@@ -16,6 +17,7 @@ let params = {
   y: 0,
   zoom: 1
 };
+
 const DragZoomContainer = (props) => {
   const {
     zoomOnInner = false,
@@ -86,6 +88,7 @@ const DragZoomContainer = (props) => {
   };
 
   useEffect(() => {
+    Promise.resolve(1).then((res) => console.log(res));
     const inner = innerRef.current;
     const outer = outerRef.current;
     // 初始化inner在容器中的位置
@@ -99,6 +102,7 @@ const DragZoomContainer = (props) => {
     const zoomOn = zoomOnInner ? inner : outer;
     onWheel(zoomOn);
   }, []);
+
   return (
     <div style={outerStyle} className={styles.outer} ref={outerRef}>
       <div className={styles.inner} ref={innerRef}>
@@ -106,6 +110,25 @@ const DragZoomContainer = (props) => {
       </div>
     </div>
   );
+};
+
+DragZoomContainer.propTypes = {
+  zoomOnInner: PropTypes.bool,
+  zoomRange: PropTypes.object,
+  zoomOrigin: PropTypes.string,
+  dragInDocument: PropTypes.bool,
+  outerStyle: PropTypes.object,
+  position: PropTypes.object,
+  children: PropTypes.node
+};
+DragZoomContainer.defaultProps = {
+  zoomOnInner: false,
+  zoomRange: { min: 0.5, max: 5 },
+  zoomOrigin: '50% 50%',
+  dragInDocument: true,
+  outerStyle: {},
+  position: { top: 0, left: 0 },
+  children: null
 };
 
 export default DragZoomContainer;
